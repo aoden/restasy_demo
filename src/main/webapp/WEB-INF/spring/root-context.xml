@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<bean id="sessionFactory"
+    class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <property name="packagesToScan" value="com.mulodo.training.domain" />
+      <property name="entityInterceptor" ref="hibernateInterceptor"></property>
+      <property name="hibernateProperties">
+      	<props>
+      		<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>          
+	        <prop key="hibernate.show_sql">true</prop>
+	        <prop key="hibernate.hbm2ddl.auto">update</prop>
+	        <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+	        <prop key="hibernate.connection.charSet">UTF-8</prop>
+	        <prop key="hibernate.format_sql">true</prop>
+	        <prop key="hibernate.connection.useUnicode">true</prop>
+	       <!--  <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate3.SpringSessionContext</prop> --> 
+	    </props>
+      </property>
+      </bean>
+	
+ 
+   <bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+      <property name="url" value="jdbc:mysql://172.16.3.167/service" />
+      <property name="username" value="root" />
+      <property name="password" value="root" />
+   </bean>
+
+   <tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+ 
+   <bean id="txManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+      <property name="sessionFactory" ref="sessionFactory" />
+      <property name="nestedTransactionAllowed" value="true"></property>
+   </bean>
+ 
+   <bean id="persistenceExceptionTranslationPostProcessor"
+    class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    
+    <bean abstract="true" class="com.mulodo.training.dao.AbstractDao" id = "abstractDao"></bean>
+    <bean id="tokenDao" class="com.mulodo.training.dao_impl.TokenDaoImpl"></bean>
+    
+    <context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="com.mulodo.training"></context:component-scan>
+</beans>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    
+    <!-- Filters -->
+    <filter>
+    	<filter-name>tokenFilter</filter-name>
+    	<filter-class>com.mulodo.training.filter.TokenFilter</filter-class>
+    	
+    </filter>
+  	
+  	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/photo/*</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+  	
+  	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/user/catpcha</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+  	
+	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/user/find_by_email</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+  	
+  	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/user/find_by_username</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+  	
+  	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/user/list</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+  	
+  	<filter-mapping>
+  		<filter-name>tokenFilter</filter-name>
+  		<url-pattern>/service/user/logout</url-pattern>
+  		<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	
+	<listener>
+		<listener-class>
+			org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+  	</listener>
+
+	<servlet>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<servlet-class>
+			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+	
+	<context-param>
+    <param-name>resteasy.servlet.mapping.prefix</param-name>
+    <param-value>/service/</param-value>
+	</context-param>
+
+</web-app>
